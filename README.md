@@ -1,4 +1,4 @@
-# Copilot Log Investigator, Visualizer, and Evaluator (C.L.I.V.E.)
+# Chat Log Inspect, View and Evaluate (C.L.I.V.E.)
 
 A Python CLI tool for parsing, analyzing, and visualizing VS Code Copilot Chat debug logs. Built for testing and measuring AI agent performance with custom MCP server tools.
 

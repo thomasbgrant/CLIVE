@@ -16,6 +16,7 @@ from parser.session_state_parser import (
     parse_session_state, extract_context_files, extract_user_messages,
 )
 from analyzer.similarity import compute_jaccard_similarity
+from analyzer.redaction import redact_text, redact_value
 
 import os
 
@@ -63,7 +64,7 @@ def _build_metadata(
     meta = SessionMetadata()
     meta.session_id = session_info["session_id"]
     meta.workspace_id = session_info["workspace_id"]
-    meta.title = session_info.get("title", "") or state.get("title", "")
+    meta.title = redact_text(session_info.get("title", "") or state.get("title", ""))
     meta.model = session_info.get("model", "") or state.get("model", "")
 
     # From session_start event
@@ -208,19 +209,21 @@ def _build_single_turn(
     # User prompt
     user_msg_events = [e for e in turn_events if e.get("type") == "user_message"]
     if user_msg_events:
-        turn.user_prompt = user_msg_events[0].get("attrs", {}).get("content", "")
+        turn.user_prompt = redact_text(
+            user_msg_events[0].get("attrs", {}).get("content", "")
+        )
     elif turn_index < len(user_messages):
-        turn.user_prompt = user_messages[turn_index].get("text", "")
+        turn.user_prompt = redact_text(user_messages[turn_index].get("text", ""))
 
     # Context files (shared across turns for now — from session state)
-    turn.context_files = context_files
+    turn.context_files = [redact_text(path) for path in context_files]
 
     # Tool calls
     tool_events = [e for e in turn_events if e.get("type") == "tool_call"]
     for te in tool_events:
         attrs = te.get("attrs", {})
-        args = parse_tool_call_args(attrs.get("args", ""))
-        result = truncate_result(attrs.get("result", ""))
+        args = redact_value(parse_tool_call_args(attrs.get("args", "")))
+        result = redact_text(truncate_result(attrs.get("result", "")))
         tc = ToolCall(
             name=te.get("name", "unknown"),
             args=args,

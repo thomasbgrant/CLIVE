@@ -20,6 +20,7 @@ from parser.session_finder import list_sessions, find_session, find_latest_sessi
 from parser.models import AnalyzedSession
 from analyzer.extractor import extract_session
 from analyzer.aggregator import compute_summary
+from analyzer.redaction import redact_text
 from visualizer.single_session import plot_all as plot_single
 from visualizer.comparison import compare_all
 
@@ -71,9 +72,9 @@ def cmd_analyze(args):
         sys.exit(1)
 
     print(f"Analyzing session: {session_info['session_id']}")
-    print(f"  Title:     {session_info.get('title', '—')}")
+    print(f"  Title:     {redact_text(session_info.get('title', '—'))}")
     print(f"  Workspace: {session_info['workspace_id']}")
-    print(f"  Log file:  {session_info['main_jsonl_path']}")
+    print(f"  Log file:  {redact_text(session_info['main_jsonl_path'])}")
     print()
 
     # Extract and aggregate
@@ -182,12 +183,12 @@ def _print_summary(session: AnalyzedSession):
         if turn.files_accessed:
             print(f"  Files Accessed ({len(turn.files_accessed)}):")
             for fa in turn.files_accessed:
-                print(f"    {fa}")
+                print(f"    {redact_text(fa)}")
 
         if turn.context_files:
             print(f"  Context Files ({len(turn.context_files)}):")
             for cf in turn.context_files:
-                print(f"    {cf}")
+                print(f"    {redact_text(cf)}")
 
         print(f"  Context–Prompt Similarity: {turn.context_similarity:.4f} (Jaccard)")
 

@@ -28,7 +28,7 @@ The developer is a data scientist building custom MCP server tools in a separate
 All data lives under the VS Code workspace storage directory:
 
 ```
-C:\Users\thomas.grant\AppData\Roaming\Code\User\workspaceStorage\
+%APPDATA%\Code\User\workspaceStorage\
 ```
 
 This directory contains multiple **workspace folders**, each identified by a UUID (e.g., `de20fe11bc4648ce43f991ef48fb20bf`). Each workspace folder corresponds to a VS Code workspace the user has opened.
@@ -318,8 +318,13 @@ log_debugging/
 ### 6.3 Configuration (`config.py`)
 
 ```python
+import os
+
 # Default path to VS Code workspace storage
-WORKSPACE_STORAGE_ROOT = r"C:\Users\thomas.grant\AppData\Roaming\Code\User\workspaceStorage"
+WORKSPACE_STORAGE_ROOT = os.path.join(
+  os.environ.get("APPDATA", ""),
+  "Code", "User", "workspaceStorage",
+)
 
 # Output directory for processed results
 RESULTS_DIR = "results"

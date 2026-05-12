@@ -1,0 +1,10 @@
+# Copilot Chat Log Analyzer — Python Dependencies
+#
+# Standard scientific Python stack only.
+# All of these are widely available via pip or conda.
+#
+# Install: pip install -r requirements.txt
+
+numpy>=1.24.0
+matplotlib>=3.7.0
+pandas>=2.0.0

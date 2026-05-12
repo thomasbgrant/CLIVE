@@ -2,6 +2,22 @@
 
 A Python CLI tool for parsing, analyzing, and visualizing VS Code Copilot Chat debug logs. Built for testing and measuring AI agent performance with custom MCP server tools.
 
+## Example use 1: 
+When adding a new feature such as a custom skill to a project, you want to find out if that addition of the skill:
+- reduces the number of unneccessary tools calls 
+- makes the agent loop run faster / slower
+- increases / decreases the number of tokens used
+
+## Example use 2:
+My agent runs forever and i dont know what it is doing? It either cannot work out the answer or gets stuck. I want to see:
+- what tools were called
+- what order tools were called in
+- how long each tool took to run
+
+These kinds of questions are hard and time consuming to answer from *eye-balling* agent json logs. **CLIVE** allows you to quickly get a breakdown of tool, time, and token use for a chat session - helping you answer if the changes you made to the MCP tools, skills or other components have made you agent better or worse. 
+
+Agent logic through tool calling order is hard to debug by traditional means - it is stochastic and variable. CLIVE shows you quickly how many times a tool was called and the order of the tool calls as well as how long each tool took to run.
+
 ## Prerequisites: Enable Copilot Chat Debug Logging
 
 This tool reads debug log files that VS Code only writes when debug logging is explicitly enabled. **You must enable this in every VS Code window you want to capture logs from.**
